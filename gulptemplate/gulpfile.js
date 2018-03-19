@@ -3,6 +3,8 @@ sass = require('gulp-sass'),
 autoprefixer = require('gulp-autoprefixer'),
 notify = require('gulp-notify'),
 connect   = require('gulp-connect')
+//原版的gulp 的 watch 不会监控文件的添加
+watch = require('gulp-watch');
 
 gulp.task('sass',function(){
  gulp.src('./sass/*.scss')
@@ -15,7 +17,7 @@ gulp.task('sass',function(){
 gulp.task('default', function(){
  gulp.run('sass','server');
     // 监听文件变化
-    gulp.watch('./sass/*.scss', function(){
+    watch('./sass/*.scss', function(){
      gulp.run('sass');
     });
     gulp.watch('./*.html',['reload'])
