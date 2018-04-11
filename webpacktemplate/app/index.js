@@ -1,4 +1,6 @@
-alert('dfdfdf')
+
+
+// Commonjs是运行时引用
 function component() {
     var element = document.createElement('div');
 
@@ -9,6 +11,5 @@ function component() {
 
     return element;
   }
-
-  export function test(){document.body.appendChild(component())};
-  
+  console.log(this)
+  document.body.appendChild(component());

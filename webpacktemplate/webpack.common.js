@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
- entry: __dirname + "/app/main.js", //已多次提及的唯一入口文件
+ entry: __dirname + "/app/index.js", //已多次提及的唯一入口文件
  output: {
      path: __dirname + "/build",
      filename: "bundle-[hash].js"
@@ -29,7 +29,12 @@ module.exports = {
                  loader: "postcss-loader"
              }
          ]
-     }]
+     }, 
+    {
+        test: require.resolve('./app/index.js'),
+        use: 'imports-loader?this=>window'
+      }
+     ]
  },
  plugins: [
      new HtmlWebpackPlugin({

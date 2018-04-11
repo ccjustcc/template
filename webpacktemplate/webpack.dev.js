@@ -13,9 +13,14 @@
     //   hot:true
       //热加载的话修改html不会reload整个页面，意味着你看不到效果
   },
+
   plugins: [
     //   new webpack.HotModuleReplacementPlugin(), //热加载插件,如果这个不加貌似是不会加载js?
       new webpack.optimize.OccurrenceOrderPlugin(),
+    //   你的jquery文件必须支持AMD或者CMD的模块规范
+      new webpack.ProvidePlugin({
+          $:'jquery' //[]就是一个包里的某个方法
+      })
       
   ],
 });
