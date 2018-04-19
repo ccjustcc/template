@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"gulp default",
-     "product":"gulp default"
+    "start": "gulp default",
+    "product": "gulp default"
   },
   "author": "cjt",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "gulp-connect": "^5.2.0",
     "gulp-notify": "^3.1.0",
     "gulp-ruby-sass": "^3.0.0",
-    "gulp-sass": "^3.1.0"
+    "gulp-sass": "^3.1.0",
+    "gulp-watch": "^5.0.0"
   }
 }
