@@ -20,9 +20,13 @@ gulp.task('default', function(){
     watch('./sass/*.scss', function(){
      gulp.run('sass');
     });
-    gulp.watch('./*.html',['reload'])
+    watch('./*.html',function(){
+        gulp.run('reload')
+    })
+    watch('./js/*.js',function(){
+        gulp.run('reload')
+    })
     gulp.watch('./css/*.css',['reload'])
-    gulp.watch('./js/*.js',['reload'])
    });
 // 创建热加载任务
 gulp.task('reload',function(){
