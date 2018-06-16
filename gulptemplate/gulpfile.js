@@ -4,7 +4,15 @@ autoprefixer = require('gulp-autoprefixer'),
 notify = require('gulp-notify'),
 connect   = require('gulp-connect')
 //原版的gulp 的 watch 不会监控文件的添加
-watch = require('gulp-watch');
+watch = require('gulp-watch')
+babel = require('gulp-babel')
+plumber = require('gulp-plumber')
+
+
+function handleError (error) {
+    console.log(error.toString());
+    this.emit('end');
+}
 
 gulp.task('sass',function(){
  gulp.src('./sass/*.scss')
@@ -23,8 +31,19 @@ gulp.task('default', function(){
     watch('./*.html',function(){
         gulp.run('reload')
     })
-    watch('./js/*.js',function(){
-        gulp.run('reload')
+    watch('./es6/*.js',function(){
+        gulp.src('./es6/*.js')
+        .pipe(plumber(
+            {}, true, function(err){
+                console.log('ERROR!!!!');
+                console.log(err);
+            }
+        ))
+        .pipe(babel())
+        // .on('error', notify.onError( (error) => { return `js went wrong, ${error}`} ))
+        // .on('error', handleError)
+        .pipe(gulp.dest('./js'))
+        // gulp.run('reload')
     })
     gulp.watch('./css/*.css',['reload'])
    });

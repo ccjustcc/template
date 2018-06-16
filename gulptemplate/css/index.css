@@ -5,7 +5,8 @@ body {
 .showlist {
   padding: 10px;
   font-size: 0;
-  text-align: center; }
+  text-align: center;
+  left: 0; }
   .showlist .showitem {
     position: relative;
     width: 200px;

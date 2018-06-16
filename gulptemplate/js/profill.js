@@ -1,129 +1,131 @@
+'use strict';
+
 //ready 方法
-(function() {
+(function () {
     var ie = !!(window.attachEvent && !window.opera);
-    var wk = /webkit\/(\d+)/i.test(navigator.userAgent) && (RegExp.$1 < 525);
+    var wk = /webkit\/(\d+)/i.test(navigator.userAgent) && RegExp.$1 < 525;
     var fn = [];
-    var run = function() { for (var i = 0; i < fn.length; i++) fn[i](); };
+    var run = function run() {
+        for (var i = 0; i < fn.length; i++) {
+            fn[i]();
+        }
+    };
     var d = document;
-    d.ready = function(f) {
-        if (!ie && !wk && d.addEventListener)
-            return d.addEventListener('DOMContentLoaded', f, false);
+    d.ready = function (f) {
+        if (!ie && !wk && d.addEventListener) return d.addEventListener('DOMContentLoaded', f, false);
         if (fn.push(f) > 1) return;
-        if (ie)
-            (function() {
-                try { d.documentElement.doScroll('left');
-                    run(); } catch (err) { setTimeout(arguments.callee, 0); }
-            })();
-        else if (wk)
-            var t = setInterval(function() {
-                if (/^(loaded|complete)$/.test(d.readyState))
-                    clearInterval(t), run();
-            }, 0);
+        if (ie) (function () {
+            try {
+                d.documentElement.doScroll('left');
+                run();
+            } catch (err) {
+                setTimeout(arguments.callee, 0);
+            }
+        })();else if (wk) var t = setInterval(function () {
+            if (/^(loaded|complete)$/.test(d.readyState)) clearInterval(t), run();
+        }, 0);
     };
 })();
 
 //事件监听
-function addEvent(dom,type,handle){
-  if(document.addEventListener){
-     dom.addEventListener(type,handle)
-  }else{
-     type="on"+type;
-     dom[type]=handle;
-  }
+function addEvent(dom, type, handle) {
+    if (document.addEventListener) {
+        dom.addEventListener(type, handle);
+    } else {
+        type = "on" + type;
+        dom[type] = handle;
+    }
 }
 
 //获取类
-function getClassNames(classStr){  
-      if (document.getElementsByClassName) {  
-            return document.getElementsByClassName(classStr)  
-      }else {  
-          var ret = [];
-          var targetNodes = document.getElementsByTagName('*')
-          for(var i =0;i<targetNodes.length;i++){
-            if(hasClass(targetNodes[i],classStr)){
-              ret.push(targetNodes[i])
+function getClassNames(classStr) {
+    if (document.getElementsByClassName) {
+        return document.getElementsByClassName(classStr);
+    } else {
+        var ret = [];
+        var targetNodes = document.getElementsByTagName('*');
+        for (var i = 0; i < targetNodes.length; i++) {
+            if (hasClass(targetNodes[i], classStr)) {
+                ret.push(targetNodes[i]);
             }
-          }
-          return ret;
-       }  
+        }
+        return ret;
+    }
 }
 
 //hasclass //自己写的
-function hasClass(el,classname){
+function hasClass(el, classname) {
 
-  var targetClassname = el.className;
-  var reg = new RegExp("(^|\\s)"+classname+"(\\s|$)","g");
-  if(reg.test(targetClassname)){
-    return true;
-  }else{
-    return false;
-  }
+    var targetClassname = el.className;
+    var reg = new RegExp("(^|\\s)" + classname + "(\\s|$)", "g");
+    if (reg.test(targetClassname)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 //添加类
-function addClass(el,classname){
-   if(hasClass(el,classname)){
-    return
-   }else{
-     var targetClassname = el.className;
-     var classNames = targetClassname.split(' ');
-     classNames.push(classname);
-     el.className = classNames.join(' ');
-   }
+function addClass(el, classname) {
+    if (hasClass(el, classname)) {
+        return;
+    } else {
+        var targetClassname = el.className;
+        var classNames = targetClassname.split(' ');
+        classNames.push(classname);
+        el.className = classNames.join(' ');
+    }
 }
 
 //移除类
-function removeClass(el,classname){
+function removeClass(el, classname) {
 
-   if(!hasClass(el,classname)){
-     return
-   }else{
-     var targetClassname = el.className;
-     var classNames = targetClassname.split(' ');
+    if (!hasClass(el, classname)) {
+        return;
+    } else {
+        var targetClassname = el.className;
+        var classNames = targetClassname.split(' ');
 
-     for(var i = 0;i<classNames.length;i++){
-        if(classNames[i]===classname){
-            classNames.splice(i, 1);
+        for (var i = 0; i < classNames.length; i++) {
+            if (classNames[i] === classname) {
+                classNames.splice(i, 1);
+            }
         }
-     }
-     el.className = classNames.join(' ');
-   }
+        el.className = classNames.join(' ');
+    }
 }
 
 //判断ie
-function isIE(){
-    var Reg =/Micro/gi;
+function isIE() {
+    var Reg = /Micro/gi;
     var browsername = navigator.appName;
-    var result = browsername.search(Reg)>-1?true:false;
-    return result
+    var result = browsername.search(Reg) > -1 ? true : false;
+    return result;
 }
-
 
 //判断是否具有css3一些特性
 //chrome和ie支持document.body，但是Firefox不支持，Firefox支持document.documentElement，对于没有doctype声明的ie又不支持document.documentElement。
-function cssProperty( attr ){
-        var prefix = [ 'O', 'ms', 'Moz', 'Webkit' ],
-            length = prefix.length,
-            style = document.createElement( 'i' ).style;
-        cssProperty =  function( attr ){
-            if( attr in style ){
+function cssProperty(attr) {
+    var prefix = ['O', 'ms', 'Moz', 'Webkit'],
+        length = prefix.length,
+        style = document.createElement('i').style;
+    cssProperty = function cssProperty(attr) {
+        if (attr in style) {
+            return true;
+        }
+        attr = attr.replace(/^[a-z]/, function (val) {
+            return val.toUpperCase();
+        });
+        var len = length;
+        while (len--) {
+            if (prefix[len] + attr in style) {
                 return true;
             }
-            attr = attr.replace( /^[a-z]/, function( val ){
-                return val.toUpperCase();
-            });
-            var len = length;
-            while( len-- ){
-                if( prefix[ len ] + attr in style ){
-                   return true;
-                }
-            }
-            return false;
-        };
-        return cssProperty( attr );
-    }
-
-
+        }
+        return false;
+    };
+    return cssProperty(attr);
+}
 
 //知乎的
 //将getClassName()方法定义在Object原型上，只要是对象皆可以用此方法；
